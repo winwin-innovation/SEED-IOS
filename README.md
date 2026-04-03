@@ -58,6 +58,27 @@ For a physical iPhone, point the SwiftUI app at your computer's LAN IP instead o
 - `npm run server`: runs only backend token server
 - `npm run preview`: preview static frontend build
 
+## Call Signaling Foundation
+
+The backend now also includes a lightweight in-memory room and signaling layer that can support two Android directions:
+- built-in SEED video calling
+- SEED room/session control for app-share or relay workflows
+
+Available endpoints:
+- `POST /api/call-rooms`
+- `GET /api/call-rooms`
+- `GET /api/call-rooms/:roomId`
+- `POST /api/call-rooms/:roomId/participants`
+- `POST /api/call-rooms/:roomId/participants/:participantId/heartbeat`
+- `DELETE /api/call-rooms/:roomId/participants/:participantId`
+- `POST /api/call-rooms/:roomId/signals`
+- `GET /api/call-rooms/:roomId/signals?participantId=...&after=...`
+
+Notes:
+- this is an in-memory prototype, not production persistence
+- it is enough to start Android call-room work and signaling experiments
+- the next upgrade would be WebSocket transport and durable room storage
+
 ## Free iOS build check
 
 This project now includes a GitHub Actions workflow at `.github/workflows/ios-build.yml`.
