@@ -6,6 +6,7 @@ struct ContentView: View {
     @AppStorage("seed.hasSeenOnboarding") private var hasSeenOnboarding = false
 
     @StateObject private var viewModel = LucyRealtimeViewModel()
+    @StateObject private var promptLibrary = PromptLibrary()
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var isShowingSettings = false
     @State private var settingsDraft = SeedSettingsDraft()
@@ -275,6 +276,8 @@ struct ContentView: View {
                     Spacer()
                 }
 
+                promptLibraryPanel
+
                 TextField("", text: $viewModel.promptText, axis: .vertical)
                     .textFieldStyle(.plain)
                     .font(.body)
@@ -285,6 +288,8 @@ struct ContentView: View {
 
                 HStack(spacing: 12) {
                     Button {
+                        let prompt = viewModel.promptText
+                        promptLibrary.registerRecent(prompt)
                         Task { await viewModel.updatePrompt() }
                     } label: {
                         HStack {
@@ -322,6 +327,86 @@ struct ContentView: View {
                 }
                 .buttonStyle(SessionButtonStyle(isConnected: viewModel.isConnected))
                 .disabled(viewModel.isBusy)
+            }
+        }
+    }
+
+    private var promptLibraryPanel: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Prompt Library")
+                    .font(.headline)
+                    .foregroundStyle(.white)
+
+                Spacer()
+
+                Button {
+                    promptLibrary.savePreset(viewModel.promptText)
+                } label: {
+                    Label("Save Look", systemImage: "plus.circle.fill")
+                }
+                .buttonStyle(SecondaryCapsuleButtonStyle())
+            }
+
+            if promptLibrary.presets.isEmpty && promptLibrary.recentPrompts.isEmpty {
+                Text("Save your favorite looks and quickly reapply recent prompts here.")
+                    .font(.footnote)
+                    .foregroundStyle(Color.white.opacity(0.68))
+            } else {
+                if !promptLibrary.presets.isEmpty {
+                    promptRow(
+                        title: "Saved",
+                        items: promptLibrary.presets,
+                        removable: true
+                    )
+                }
+
+                if !promptLibrary.recentPrompts.isEmpty {
+                    promptRow(
+                        title: "Recent",
+                        items: promptLibrary.recentPrompts,
+                        removable: false
+                    )
+                }
+            }
+        }
+    }
+
+    private func promptRow(title: String, items: [String], removable: Bool) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.white.opacity(0.68))
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 10) {
+                    ForEach(items, id: \.self) { item in
+                        promptChip(prompt: item, removable: removable)
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+        }
+    }
+
+    private func promptChip(prompt: String, removable: Bool) -> some View {
+        HStack(spacing: 8) {
+            Button {
+                viewModel.promptText = prompt
+            } label: {
+                Text(prompt)
+                    .lineLimit(1)
+            }
+            .buttonStyle(PromptChipButtonStyle())
+
+            if removable {
+                Button {
+                    promptLibrary.removePreset(prompt)
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 15))
+                        .foregroundStyle(Color.white.opacity(0.76))
+                }
             }
         }
     }
@@ -766,6 +851,22 @@ private struct SessionButtonStyle: ButtonStyle {
                     )
             )
             .opacity(configuration.isPressed ? 0.9 : 1)
+    }
+}
+
+private struct PromptChipButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.footnote.weight(.medium))
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
+            .background(Color.black.opacity(configuration.isPressed ? 0.26 : 0.18))
+            .foregroundStyle(.white)
+            .clipShape(Capsule())
+            .overlay(
+                Capsule()
+                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+            )
     }
 }
 

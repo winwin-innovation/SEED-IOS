@@ -16,6 +16,7 @@
 		A10000000000000000000007 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000107 /* Assets.xcassets */; };
 		A10000000000000000000008 /* DecartSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000401 /* DecartSDK */; };
 		A10000000000000000000009 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000304 /* LaunchScreen.storyboard */; };
+		A10000000000000000000010 /* PromptLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000111 /* PromptLibrary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		A10000000000000000000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ../GinxSeedSwiftUI/Info.plist; sourceTree = "<group>"; };
 		A10000000000000000000109 /* GinxSeedSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GinxSeedSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10000000000000000000110 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = ../GinxSeedSwiftUI/Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A10000000000000000000111 /* PromptLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/PromptLibrary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 				A10000000000000000000108 /* Info.plist */,
 				A10000000000000000000304 /* LaunchScreen.storyboard */,
 				A10000000000000000000104 /* LucyRealtimeViewModel.swift */,
+				A10000000000000000000111 /* PromptLibrary.swift */,
 				A10000000000000000000105 /* RTCVideoView.swift */,
 				A10000000000000000000106 /* TokenService.swift */,
 				A10000000000000000000107 /* Assets.xcassets */,
@@ -169,6 +172,7 @@
 				A10000000000000000000002 /* ContentView.swift in Sources */,
 				A10000000000000000000003 /* GinxSeedSwiftUIApp.swift in Sources */,
 				A10000000000000000000004 /* LucyRealtimeViewModel.swift in Sources */,
+				A10000000000000000000010 /* PromptLibrary.swift in Sources */,
 				A10000000000000000000005 /* RTCVideoView.swift in Sources */,
 				A10000000000000000000006 /* TokenService.swift in Sources */,
 			);
