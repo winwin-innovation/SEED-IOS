@@ -23,7 +23,9 @@ final class LucyRealtimeViewModel: ObservableObject {
     private let model = Models.realtime(.lucy_2_rt)
 
     private var manager: DecartRealtimeManager?
+    #if !targetEnvironment(simulator)
     private var capture: RealtimeCapture?
+    #endif
     private var stateTask: Task<Void, Never>?
     private var remoteStreamTask: Task<Void, Never>?
     private var referenceImageData: Data?
@@ -43,6 +45,14 @@ final class LucyRealtimeViewModel: ObservableObject {
     func connect() async {
         guard !isStarting, manager == nil else { return }
 
+        #if targetEnvironment(simulator)
+        lastError = "The iOS Simulator cannot use Decart camera capture. Use GitHub Actions for compile checks and a physical iPhone for realtime testing."
+        statusText = "Simulator Only"
+        detailText = "This build target is valid for CI, but Lucy realtime needs a real iPhone camera."
+        isConnected = false
+        isStarting = false
+        return
+        #else
         isStarting = true
         lastError = nil
         statusText = "Connecting"
@@ -98,6 +108,7 @@ final class LucyRealtimeViewModel: ObservableObject {
         }
 
         isStarting = false
+        #endif
     }
 
     func applyReferenceImage(_ image: UIImage?) {
@@ -144,11 +155,15 @@ final class LucyRealtimeViewModel: ObservableObject {
     }
 
     func switchCamera() async {
+        #if targetEnvironment(simulator)
+        lastError = "Camera switching is unavailable in the iOS Simulator."
+        #else
         do {
             try await capture?.switchCamera()
         } catch {
             lastError = error.localizedDescription
         }
+        #endif
     }
 
     func disconnect() async {
@@ -158,10 +173,14 @@ final class LucyRealtimeViewModel: ObservableObject {
         remoteStreamTask = nil
 
         await manager?.disconnect()
+        #if !targetEnvironment(simulator)
         await capture?.stopCapture()
+        #endif
 
         manager = nil
+        #if !targetEnvironment(simulator)
         capture = nil
+        #endif
         localVideoTrack = nil
         remoteVideoTrack = nil
         isConnected = false
