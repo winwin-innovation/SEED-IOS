@@ -18,14 +18,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A10000000000000000000101 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../AppConfiguration.swift; sourceTree = "<group>"; };
-		A10000000000000000000102 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../ContentView.swift; sourceTree = "<group>"; };
-		A10000000000000000000103 /* GinxSeedSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUIApp.swift; sourceTree = "<group>"; };
-		A10000000000000000000104 /* LucyRealtimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../LucyRealtimeViewModel.swift; sourceTree = "<group>"; };
-		A10000000000000000000105 /* RTCVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../RTCVideoView.swift; sourceTree = "<group>"; };
-		A10000000000000000000106 /* TokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../TokenService.swift; sourceTree = "<group>"; };
-		A10000000000000000000107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ../Assets.xcassets; sourceTree = "<group>"; };
-		A10000000000000000000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ../Info.plist; sourceTree = "<group>"; };
+		A10000000000000000000101 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/AppConfiguration.swift; sourceTree = "<group>"; };
+		A10000000000000000000102 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/ContentView.swift; sourceTree = "<group>"; };
+		A10000000000000000000103 /* GinxSeedSwiftUIApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/GinxSeedSwiftUIApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000104 /* LucyRealtimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/LucyRealtimeViewModel.swift; sourceTree = "<group>"; };
+		A10000000000000000000105 /* RTCVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/RTCVideoView.swift; sourceTree = "<group>"; };
+		A10000000000000000000106 /* TokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../GinxSeedSwiftUI/TokenService.swift; sourceTree = "<group>"; };
+		A10000000000000000000107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ../GinxSeedSwiftUI/Assets.xcassets; sourceTree = "<group>"; };
+		A10000000000000000000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ../GinxSeedSwiftUI/Info.plist; sourceTree = "<group>"; };
 		A10000000000000000000109 /* GinxSeedSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GinxSeedSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
