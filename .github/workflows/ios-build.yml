@@ -1,0 +1,49 @@
+name: iOS Build
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ios-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-ios-simulator:
+    runs-on: macos-15
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Show Xcode Version
+        run: xcodebuild -version
+
+      - name: Resolve Swift Packages
+        working-directory: ios/GinxSeedSwiftUI
+        run: |
+          xcodebuild \
+            -project GinxSeedSwiftUI.xcodeproj \
+            -scheme GinxSeedSwiftUI \
+            -resolvePackageDependencies
+
+      - name: Build For iOS Simulator
+        working-directory: ios/GinxSeedSwiftUI
+        run: |
+          xcodebuild \
+            -project GinxSeedSwiftUI.xcodeproj \
+            -scheme GinxSeedSwiftUI \
+            -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build

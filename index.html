@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GINX | AI Video Transformation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script type="module" src="/src/main.js"></script>
+</head>
+<body class="antialiased select-none">
+  <nav class="top-nav">
+    <div class="top-left">
+      <span class="brand">GINX</span>
+      <span class="status-chip" id="status-chip">Ready</span>
+    </div>
+
+    <div class="top-right">
+      <div class="credits-display" id="credits-display">
+        <span class="credits-label">Credits:</span>
+        <span class="credits-value" id="remaining-credits">Loading...</span>
+      </div>
+      <div class="timer-wrap">
+        <span id="timer">01:20</span>
+      </div>
+      <button id="stop-session" class="stop-btn">Stop Session</button>
+    </div>
+  </nav>
+
+  <main class="main-shell">
+    <section class="video-grid" id="videoGrid">
+      <article class="video-container">
+        <video id="source-video" autoplay muted playsinline class="media"></video>
+        <div class="overlay"></div>
+        <div class="corner-label">Your Camera</div>
+      </article>
+
+      <article class="video-container">
+        <img id="character-image" class="media" src="https://i.ibb.co/DDXFs9vk/Untitled-1.jpg" alt="Character reference" />
+        <div id="result-loading" class="result-loading hidden">
+          <div class="spinner"></div>
+          <p>Applying transformation...</p>
+        </div>
+        <div class="top-label">Character Reference</div>
+        <button id="fullscreen-btn" class="fullscreen-btn" aria-label="Toggle fullscreen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        </button>
+      </article>
+    </section>
+
+    <section class="control-shell">
+      <div class="prompt-box">
+        <textarea id="prompt-input" placeholder="Enter transformation prompt..."></textarea>
+
+        <div class="actions-row">
+          <button id="upload-btn" class="upload-btn" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            <span>Upload Image</span>
+          </button>
+          <input id="image-input" type="file" accept="image/*" class="hidden" />
+
+          <button id="send-btn" class="send-btn" type="button" aria-label="Send transformation prompt">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+
+        <p id="uploaded-label" class="uploaded-label hidden"></p>
+      </div>
+
+      <!-- Floating Support Banner -->
+      <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[150] w-[90%] max-w-xl">
+        <div class="bg-white/5 backdrop-blur-2xl border border-white/20 p-4 rounded-3xl shadow-2xl flex items-center justify-between gap-4">
+          
+          <!-- Text -->
+          <div class="flex flex-col items-start flex-1">
+            <p class="text-white/20 text-sm font-bold tracking-widest uppercase">We maketh the unknown know.</p>
+            <p class="text-white/20 text-xs tracking-widest uppercase mt-1">For more tailored assistance</p>
+          </div>
+
+          <!-- Support Button -->
+          <a href="https://t.me/godandinternet" target="_blank"
+             class="bg-white text-black px-6 py-2.5 rounded-2xl font-bold text-xs hover:bg-gray-200 transition-all tracking-widest uppercase shadow-lg whitespace-nowrap">
+            @godandinternet
+          </a>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+</body>
+</html>
