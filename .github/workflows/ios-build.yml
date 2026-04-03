@@ -32,9 +32,6 @@ jobs:
       - name: Show Xcode Version
         run: xcodebuild -version
 
-      - name: Build Hygiene
-        run: swift package reset
-
       - name: Resolve Swift Packages
         working-directory: ios/GinxSeedSwiftUI
         run: |
