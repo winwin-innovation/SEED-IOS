@@ -54,6 +54,7 @@ For a physical iPhone, point the SwiftUI app at your computer's LAN IP instead o
 ## Scripts
 
 - `npm run dev`: runs frontend and backend together
+- `npm run build`: creates a production web build with Vite
 - `npm run web`: runs only Vite frontend
 - `npm run server`: runs only backend token server
 - `npm run preview`: preview static frontend build
@@ -78,6 +79,12 @@ Notes:
 - this is an in-memory prototype, not production persistence
 - it is enough to start Android call-room work and signaling experiments
 - the next upgrade would be WebSocket transport and durable room storage
+
+The web frontend now includes a room debugger so you can test that signaling layer without building Android first. It can:
+- create host rooms
+- join selected rooms as a guest participant
+- send test signals like `offer`, `answer`, or `ice-candidate`
+- poll and inspect the room signal feed
 
 ## Free iOS build check
 

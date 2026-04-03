@@ -69,6 +69,91 @@
         <p id="uploaded-label" class="uploaded-label hidden"></p>
       </div>
 
+      <section class="lab-shell" aria-labelledby="call-lab-title">
+        <div class="lab-header">
+          <div>
+            <p class="eyebrow">Android Call Paths</p>
+            <h2 id="call-lab-title">SEED Room Debugger</h2>
+          </div>
+          <button id="refresh-rooms-btn" class="secondary-btn" type="button">Refresh Rooms</button>
+        </div>
+
+        <div class="lab-grid">
+          <article class="lab-card">
+            <h3>Create Room</h3>
+            <label class="field">
+              <span>Room name</span>
+              <input id="room-name-input" type="text" placeholder="Creator session" />
+            </label>
+            <label class="field">
+              <span>Host name</span>
+              <input id="host-name-input" type="text" placeholder="SEED Host" />
+            </label>
+            <button id="create-room-btn" class="primary-btn" type="button">Create Room</button>
+          </article>
+
+          <article class="lab-card">
+            <div class="card-header">
+              <h3>Available Rooms</h3>
+              <span id="room-count-badge" class="badge">0 rooms</span>
+            </div>
+            <div id="rooms-list" class="list-stack">
+              <p class="empty-copy">No rooms yet. Create one to start testing signaling.</p>
+            </div>
+          </article>
+
+          <article class="lab-card active-room-card">
+            <div class="card-header">
+              <h3>Active Session</h3>
+              <span id="active-room-badge" class="badge muted">Not connected</span>
+            </div>
+            <div id="active-room-summary" class="summary-box">
+              <p>Pick a room and join it as a participant to start sending test signals.</p>
+            </div>
+            <label class="field">
+              <span>Guest name</span>
+              <input id="guest-name-input" type="text" placeholder="Android Guest" />
+            </label>
+            <button id="join-room-btn" class="secondary-btn" type="button" disabled>Join Selected Room</button>
+            <button id="leave-room-btn" class="ghost-btn" type="button" disabled>Leave Room</button>
+          </article>
+        </div>
+
+        <div class="lab-grid secondary-grid">
+          <article class="lab-card">
+            <div class="card-header">
+              <h3>Signals</h3>
+              <span id="polling-badge" class="badge muted">Idle</span>
+            </div>
+            <label class="field">
+              <span>Signal type</span>
+              <input id="signal-type-input" type="text" value="offer" />
+            </label>
+            <label class="field">
+              <span>Target participant ID</span>
+              <input id="signal-target-input" type="text" placeholder="Leave blank to broadcast" />
+            </label>
+            <label class="field">
+              <span>Payload JSON</span>
+              <textarea id="signal-payload-input" class="text-field" rows="6" placeholder='{"sdp":"test-offer"}'></textarea>
+            </label>
+            <div class="button-row">
+              <button id="send-signal-btn" class="primary-btn" type="button" disabled>Send Signal</button>
+              <button id="poll-signals-btn" class="secondary-btn" type="button" disabled>Poll Now</button>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="card-header">
+              <h3>Signal Feed</h3>
+              <span id="signal-sequence-badge" class="badge">Seq 0</span>
+            </div>
+            <div id="signals-log" class="log-box">
+              <p class="empty-copy">Signals will appear here once a room is active.</p>
+            </div>
+          </article>
+        </div>
+
       <!-- Floating Support Banner -->
       <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-[150] w-[90%] max-w-xl">
         <div class="bg-white/5 backdrop-blur-2xl border border-white/20 p-4 rounded-3xl shadow-2xl flex items-center justify-between gap-4">

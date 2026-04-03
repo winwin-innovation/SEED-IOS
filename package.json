@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -k \"npm:server\" \"npm:web\"",
+    "build": "vite build",
     "web": "vite",
     "server": "node server/index.js",
     "preview": "vite preview"
