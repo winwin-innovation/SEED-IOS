@@ -15,6 +15,7 @@
 		A10000000000000000000006 /* TokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000106 /* TokenService.swift */; };
 		A10000000000000000000007 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000107 /* Assets.xcassets */; };
 		A10000000000000000000008 /* DecartSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000401 /* DecartSDK */; };
+		A10000000000000000000009 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000110 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		A10000000000000000000107 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ../GinxSeedSwiftUI/Assets.xcassets; sourceTree = "<group>"; };
 		A10000000000000000000108 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = ../GinxSeedSwiftUI/Info.plist; sourceTree = "<group>"; };
 		A10000000000000000000109 /* GinxSeedSwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GinxSeedSwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000110 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ../GinxSeedSwiftUI/LaunchScreen.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 				A10000000000000000000102 /* ContentView.swift */,
 				A10000000000000000000103 /* GinxSeedSwiftUIApp.swift */,
 				A10000000000000000000108 /* Info.plist */,
+				A10000000000000000000110 /* LaunchScreen.storyboard */,
 				A10000000000000000000104 /* LucyRealtimeViewModel.swift */,
 				A10000000000000000000105 /* RTCVideoView.swift */,
 				A10000000000000000000106 /* TokenService.swift */,
@@ -140,6 +143,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000007 /* Assets.xcassets in Resources */,
+				A10000000000000000000009 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
