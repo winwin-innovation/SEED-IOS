@@ -3,8 +3,12 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
+    @AppStorage("seed.hasSeenOnboarding") private var hasSeenOnboarding = false
+
     @StateObject private var viewModel = LucyRealtimeViewModel()
     @State private var selectedPhoto: PhotosPickerItem?
+    @State private var isShowingSettings = false
+    @State private var settingsDraft = SeedSettingsDraft()
 
     var body: some View {
         NavigationStack {
@@ -24,9 +28,21 @@ struct ContentView: View {
             }
             .navigationTitle("SEED")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        settingsDraft = SeedSettingsDraft()
+                        isShowingSettings = true
+                    } label: {
+                        Image(systemName: "slider.horizontal.3")
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
             .task {
+                viewModel.reloadConfiguration()
                 await viewModel.checkBackend()
-                if AppConfiguration.autoConnectOnLaunch && !viewModel.isConnected {
+                if hasSeenOnboarding && AppConfiguration.autoConnectOnLaunch && !viewModel.isConnected {
                     await viewModel.connect()
                 }
             }
@@ -45,6 +61,48 @@ struct ContentView: View {
                         }
                     }
                 }
+            }
+            .sheet(isPresented: $isShowingSettings) {
+                SeedSettingsView(
+                    draft: $settingsDraft,
+                    onSave: {
+                        AppConfiguration.saveSettings(
+                            backendBaseURL: settingsDraft.backendBaseURL,
+                            defaultPrompt: settingsDraft.defaultPrompt,
+                            autoConnectOnLaunch: settingsDraft.autoConnectOnLaunch
+                        )
+                        viewModel.reloadConfiguration()
+                        isShowingSettings = false
+
+                        Task {
+                            await viewModel.checkBackend()
+                        }
+                    },
+                    onReset: {
+                        AppConfiguration.resetSettings()
+                        settingsDraft = SeedSettingsDraft()
+                        viewModel.reloadConfiguration()
+
+                        Task {
+                            await viewModel.checkBackend()
+                        }
+                    }
+                )
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+            }
+            .fullScreenCover(isPresented: onboardingBinding) {
+                SeedOnboardingView(
+                    backendURL: viewModel.backendURLText,
+                    onOpenSettings: {
+                        hasSeenOnboarding = true
+                        settingsDraft = SeedSettingsDraft()
+                        isShowingSettings = true
+                    },
+                    onContinue: {
+                        hasSeenOnboarding = true
+                    }
+                )
             }
             .alert("Connection Error", isPresented: errorBinding) {
                 Button("OK", role: .cancel) {
@@ -149,13 +207,25 @@ struct ContentView: View {
     private var setupPanel: some View {
         GlassCard {
             VStack(alignment: .leading, spacing: 18) {
-                Text("Ready The Pipeline")
-                    .font(.title3.weight(.bold))
-                    .foregroundStyle(.white)
+                HStack {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Ready The Pipeline")
+                            .font(.title3.weight(.bold))
+                            .foregroundStyle(.white)
 
-                Text("The build is now passing in GitHub Actions. This section keeps the local device setup obvious when you eventually test on iPhone.")
-                    .font(.subheadline)
-                    .foregroundStyle(Color.white.opacity(0.75))
+                        Text("SEED now includes in-app onboarding and settings, so your backend setup no longer depends on editing plist values by hand.")
+                            .font(.subheadline)
+                            .foregroundStyle(Color.white.opacity(0.75))
+                    }
+
+                    Spacer()
+
+                    Button("Settings") {
+                        settingsDraft = SeedSettingsDraft()
+                        isShowingSettings = true
+                    }
+                    .buttonStyle(SecondaryCapsuleButtonStyle())
+                }
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Backend Endpoint")
@@ -170,8 +240,8 @@ struct ContentView: View {
 
                 HStack(alignment: .top, spacing: 12) {
                     SetupStepCard(index: "01", title: "Run Server", detail: "Start the Node token server on your computer.")
-                    SetupStepCard(index: "02", title: "Set LAN URL", detail: "Replace localhost with your machine IP in Info.plist.")
-                    SetupStepCard(index: "03", title: "Use iPhone", detail: "Realtime camera capture needs a physical device.")
+                    SetupStepCard(index: "02", title: "Set LAN URL", detail: "Use Settings to swap localhost for your LAN IP.")
+                    SetupStepCard(index: "03", title: "Use iPhone", detail: "Realtime camera capture still needs a physical device.")
                 }
 
                 Button {
@@ -321,6 +391,15 @@ struct ContentView: View {
         .foregroundStyle(.white)
     }
 
+    private var onboardingBinding: Binding<Bool> {
+        Binding(
+            get: { !hasSeenOnboarding },
+            set: { shouldShow in
+                hasSeenOnboarding = !shouldShow
+            }
+        )
+    }
+
     private var errorBinding: Binding<Bool> {
         Binding(
             get: { viewModel.lastError != nil },
@@ -330,6 +409,206 @@ struct ContentView: View {
                 }
             }
         )
+    }
+}
+
+private struct SeedSettingsDraft {
+    var backendBaseURL = AppConfiguration.backendBaseURL.absoluteString
+    var defaultPrompt = AppConfiguration.defaultPrompt
+    var autoConnectOnLaunch = AppConfiguration.autoConnectOnLaunch
+}
+
+private struct SeedOnboardingView: View {
+    let backendURL: String
+    let onOpenSettings: () -> Void
+    let onContinue: () -> Void
+
+    var body: some View {
+        ZStack {
+            SeedBackdrop()
+
+            VStack(alignment: .leading, spacing: 24) {
+                Spacer()
+
+                SeedMark()
+
+                VStack(alignment: .leading, spacing: 14) {
+                    Text("Welcome to SEED")
+                        .font(.system(size: 38, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+
+                    Text("This app is ready to build in the cloud right now. When you eventually test on a real iPhone, SEED will connect to your token server and stream the Lucy transformation live.")
+                        .font(.title3)
+                        .foregroundStyle(Color.white.opacity(0.78))
+                }
+
+                VStack(spacing: 14) {
+                    OnboardingRow(
+                        title: "Backend first",
+                        detail: "Current endpoint: \(backendURL)"
+                    )
+                    OnboardingRow(
+                        title: "Physical device later",
+                        detail: "GitHub validates the native build today, but the live camera flow still needs iPhone hardware."
+                    )
+                    OnboardingRow(
+                        title: "Settings are in-app",
+                        detail: "You can change backend URL, prompt defaults, and auto-connect behavior without editing plist files."
+                    )
+                }
+
+                Spacer()
+
+                VStack(spacing: 12) {
+                    Button("Open Settings") {
+                        onOpenSettings()
+                    }
+                    .buttonStyle(PrimaryCapsuleButtonStyle())
+
+                    Button("Continue to App") {
+                        onContinue()
+                    }
+                    .buttonStyle(SecondaryCapsuleButtonStyle())
+                }
+            }
+            .padding(24)
+        }
+    }
+}
+
+private struct SeedSettingsView: View {
+    @Binding var draft: SeedSettingsDraft
+    let onSave: () -> Void
+    let onReset: () -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                SeedBackdrop()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 18) {
+                        GlassCard {
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text("Connection")
+                                    .font(.title3.weight(.bold))
+                                    .foregroundStyle(.white)
+
+                                settingsField(
+                                    title: "Backend URL",
+                                    text: $draft.backendBaseURL,
+                                    prompt: "http://192.168.1.25:8787"
+                                )
+
+                                Toggle(isOn: $draft.autoConnectOnLaunch) {
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text("Auto-connect on launch")
+                                            .foregroundStyle(.white)
+                                        Text("Only turn this on when your backend is reliably reachable.")
+                                            .font(.footnote)
+                                            .foregroundStyle(Color.white.opacity(0.7))
+                                    }
+                                }
+                                .tint(Color(red: 0.97, green: 0.48, blue: 0.25))
+                            }
+                        }
+
+                        GlassCard {
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text("Creative Default")
+                                    .font(.title3.weight(.bold))
+                                    .foregroundStyle(.white)
+
+                                settingsField(
+                                    title: "Default prompt",
+                                    text: $draft.defaultPrompt,
+                                    prompt: "Transform into this character with polished cinematic detail",
+                                    axis: .vertical
+                                )
+                            }
+                        }
+
+                        GlassCard {
+                            VStack(alignment: .leading, spacing: 16) {
+                                Text("Actions")
+                                    .font(.title3.weight(.bold))
+                                    .foregroundStyle(.white)
+
+                                Button("Save Settings") {
+                                    onSave()
+                                }
+                                .buttonStyle(PrimaryCapsuleButtonStyle())
+
+                                Button("Reset to Bundle Defaults") {
+                                    onReset()
+                                }
+                                .buttonStyle(SecondaryCapsuleButtonStyle())
+                            }
+                        }
+                    }
+                    .padding(20)
+                }
+            }
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close") {
+                        dismiss()
+                    }
+                    .foregroundStyle(.white)
+                }
+            }
+        }
+    }
+
+    private func settingsField(
+        title: String,
+        text: Binding<String>,
+        prompt: String,
+        axis: Axis = .horizontal
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.white.opacity(0.72))
+
+            TextField(prompt, text: text, axis: axis)
+                .textFieldStyle(.plain)
+                .padding(14)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .lineLimit(axis == .vertical ? 4...7 : 1...1)
+        }
+    }
+}
+
+private struct OnboardingRow: View {
+    let title: String
+    let detail: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 12) {
+            Circle()
+                .fill(Color(red: 0.98, green: 0.72, blue: 0.28))
+                .frame(width: 10, height: 10)
+                .padding(.top, 6)
+
+            VStack(alignment: .leading, spacing: 6) {
+                Text(title)
+                    .font(.headline)
+                    .foregroundStyle(.white)
+
+                Text(detail)
+                    .font(.subheadline)
+                    .foregroundStyle(Color.white.opacity(0.72))
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(Color.white.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
     }
 }
 

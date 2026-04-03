@@ -6,7 +6,7 @@ import WebRTC
 
 @MainActor
 final class LucyRealtimeViewModel: ObservableObject {
-    @Published var promptText = AppConfiguration.defaultPrompt
+    @Published var promptText: String
     @Published var statusText = "Idle"
     @Published var detailText = "Configure the backend URL, then connect on a physical iPhone."
     @Published var isConnected = false
@@ -30,6 +30,10 @@ final class LucyRealtimeViewModel: ObservableObject {
     private var remoteStreamTask: Task<Void, Never>?
     private var referenceImageData: Data?
 
+    init() {
+        promptText = AppConfiguration.defaultPrompt
+    }
+
     var backendURLText: String {
         tokenService.backendSummary()
     }
@@ -40,6 +44,12 @@ final class LucyRealtimeViewModel: ObservableObject {
 
     var isBusy: Bool {
         isStarting || isUpdatingPrompt || isCheckingBackend
+    }
+
+    func reloadConfiguration() {
+        if promptText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || !isConnected {
+            promptText = AppConfiguration.defaultPrompt
+        }
     }
 
     func connect() async {
