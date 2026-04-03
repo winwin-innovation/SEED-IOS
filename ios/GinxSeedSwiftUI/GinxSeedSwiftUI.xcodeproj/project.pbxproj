@@ -15,7 +15,6 @@
 		A10000000000000000000006 /* TokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000106 /* TokenService.swift */; };
 		A10000000000000000000007 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000107 /* Assets.xcassets */; };
 		A10000000000000000000008 /* DecartSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000401 /* DecartSDK */; };
-		A10000000000000000000009 /* WebRTC in Frameworks */ = {isa = PBXBuildFile; productRef = A10000000000000000000402 /* WebRTC */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,7 +35,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A10000000000000000000008 /* DecartSDK in Frameworks */,
-				A10000000000000000000009 /* WebRTC in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,7 +92,6 @@
 			name = GinxSeedSwiftUI;
 			packageProductDependencies = (
 				A10000000000000000000401 /* DecartSDK */,
-				A10000000000000000000402 /* WebRTC */,
 			);
 			productName = GinxSeedSwiftUI;
 			productReference = A10000000000000000000109 /* GinxSeedSwiftUI.app */;
@@ -361,11 +358,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A10000000000000000000403 /* XCRemoteSwiftPackageReference "decart-ios" */;
 			productName = DecartSDK;
-		};
-		A10000000000000000000402 /* WebRTC */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A10000000000000000000403 /* XCRemoteSwiftPackageReference "decart-ios" */;
-			productName = WebRTC;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
