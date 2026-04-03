@@ -1,6 +1,6 @@
 # Ginx-Seed v1.0
 
-This project now uses a secure backend token flow:
+This project now uses a secure backend token flow and includes a native iPhone app under `ios/GinxSeedSwiftUI`:
 - Your permanent Decart API key lives only on the backend (`DECART_API_KEY`).
 - The frontend requests short-lived client tokens from `POST /api/realtime-token`.
 

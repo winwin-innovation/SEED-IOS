@@ -1,6 +1,6 @@
-# GinxSeed SwiftUI
+# SEED SwiftUI
 
-This folder now contains a full native SwiftUI iOS app scaffold for Lucy realtime.
+This folder now contains the native SwiftUI iOS app for SEED and the Lucy realtime workflow.
 
 ## What it includes
 
@@ -10,6 +10,7 @@ This folder now contains a full native SwiftUI iOS app scaffold for Lucy realtim
 - Prompt updates while connected
 - Reference image upload for Lucy 2 character transforms
 - Local and remote WebRTC video rendering in SwiftUI
+- A more branded camera-first iPhone interface
 
 ## Xcode setup
 
