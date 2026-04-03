@@ -347,8 +347,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/decartai/decart-ios.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = revision;
+				revision = 1eafea138510f96829c42b15ce037159368c98b3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
