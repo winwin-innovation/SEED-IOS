@@ -14,7 +14,10 @@ concurrency:
 
 jobs:
   build-ios-simulator:
-    runs-on: macos-15
+    runs-on: macos-latest
+    env:
+      IOS_DEVICE_NAME: "iPhone 16 Pro"
+      IOS_OS_VERSION: "18.5"
     defaults:
       run:
         shell: bash
@@ -29,6 +32,9 @@ jobs:
       - name: Show Xcode Version
         run: xcodebuild -version
 
+      - name: Build Hygiene
+        run: swift package reset
+
       - name: Resolve Swift Packages
         working-directory: ios/GinxSeedSwiftUI
         run: |
@@ -40,11 +46,12 @@ jobs:
       - name: Build For iOS Simulator
         working-directory: ios/GinxSeedSwiftUI
         run: |
+          set -o pipefail
           xcodebuild \
             -project GinxSeedSwiftUI.xcodeproj \
             -scheme GinxSeedSwiftUI \
             -configuration Debug \
             -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
+            -destination "platform=iOS Simulator,name=$IOS_DEVICE_NAME,OS=$IOS_OS_VERSION" \
             CODE_SIGNING_ALLOWED=NO \
-            build
+            build 2>&1 | xcbeautify --renderer github-actions
